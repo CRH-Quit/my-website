@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Gaming Hub</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            padding: 30px;
+            font-size: 30px;
+            font-weight: bold;
+            background: black;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            display: inline-block;
+            background: #111;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 15px;
+            width: 200px;
+            box-shadow: 0 0 15px cyan;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px lime;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: cyan;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        #secret {
+            display: none;
+            margin-top: 30px;
+            font-size: 20px;
+            color: lime;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>🎮 MY GAMING HUB</header>
+
+    <div class="container">
+
+        <div class="card">
+            <h3>⚔️ PvP Mode</h3>
+            <p>Fight other players</p>
+        </div>
+
+        <div class="card">
+            <h3>💰 Grinding</h3>
+            <p>Level up fast</p>
+        </div>
+
+        <div class="card">
+            <h3>🔥 Boss Fight</h3>
+            <p>Defeat strong enemies</p>
+        </div>
+
+        <br>
+
+        <button onclick="unlock()">Unlock Secret</button>
+
+        <p id="secret">🏆 SECRET UNLOCKED! You are a pro gamer 😎</p>
+
+    </div>
+
+    <script>
+        function unlock() {
+            let pass = prompt("Enter gamer code:");
+            if (pass === "pro123") {
+                document.getElementById("secret").style.display = "block";
+            } else {
+                alert("Wrong code!");
+            }
+        }
+    </script>
+
+</body>
+</html>
