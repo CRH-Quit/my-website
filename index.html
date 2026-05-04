@@ -1,102 +1,217 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-    <title>My Gaming Hub</title>
+  <title>Calculator</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: white;
-            text-align: center;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      color: white;
+      font-family: Arial;
+    }
 
-        header {
-            padding: 30px;
-            font-size: 30px;
-            font-weight: bold;
-            background: black;
-            box-shadow: 0 0 20px cyan;
-        }
+    .calc {
+      width: 100vw;
+      height: 100vh;
+      background: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .container {
-            margin-top: 50px;
-        }
+    input {
+      width: 90%;
+      height: 60px;
+      font-size: 28px;
+      text-align: right;
+      margin-bottom: 20px;
+    }
 
-        .card {
-            display: inline-block;
-            background: #111;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 15px;
-            width: 200px;
-            box-shadow: 0 0 15px cyan;
-            transition: 0.3s;
-        }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: 90%;
+      gap: 10px;
+    }
 
-        .card:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px lime;
-        }
+    button {
+      height: 70px;
+      font-size: 22px;
+      background: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
 
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: cyan;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-        }
+    button:hover {
+      background: cyan;
+      color: black;
+    }
 
-        #secret {
-            display: none;
-            margin-top: 30px;
-            font-size: 20px;
-            color: lime;
-        }
-    </style>
+    #diary {
+      display: none;
+      text-align: center;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 90%;
+      height: 200px;
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    #chatBox {
+      height: 200px;
+      overflow-y: auto;
+      background: #222;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .msg {
+      background: #333;
+      padding: 5px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+  </style>
+
 </head>
 
 <body>
 
-    <header>🎮 MY GAMING HUB</header>
+<!-- CALCULATOR -->
 
-    <div class="container">
+<div class="calc" id="calc">
 
-        <div class="card">
-            <h3>⚔️ PvP Mode</h3>
-            <p>Fight other players</p>
-        </div>
+  <input id="screen" disabled>
 
-        <div class="card">
-            <h3>💰 Grinding</h3>
-            <p>Level up fast</p>
-        </div>
+  <div class="buttons">
+    <button onclick="press('7')">7</button>
+    <button onclick="press('8')">8</button>
+    <button onclick="press('9')">9</button>
+    <button onclick="press('+')">+</button>
 
-        <div class="card">
-            <h3>🔥 Boss Fight</h3>
-            <p>Defeat strong enemies</p>
-        </div>
+```
+<button onclick="press('4')">4</button>
+<button onclick="press('5')">5</button>
+<button onclick="press('6')">6</button>
+<button onclick="press('-')">-</button>
 
-        <br>
+<button onclick="press('1')">1</button>
+<button onclick="press('2')">2</button>
+<button onclick="press('3')">3</button>
+<button onclick="press('*')">*</button>
 
-        <button onclick="unlock()">Unlock Secret</button>
+<button onclick="clearScreen()">C</button>
+<button onclick="press('0')">0</button>
+<button onclick="unlock()">=</button>
+<button onclick="press('/')">/</button>
+```
 
-        <p id="secret">🏆 SECRET UNLOCKED! You are a pro gamer 😎</p>
+  </div>
 
-    </div>
+</div>
 
-    <script>
-        function unlock() {
-            let pass = prompt("Enter gamer code:");
-            if (pass === "pro123") {
-                document.getElementById("secret").style.display = "block";
-            } else {
-                alert("Wrong code!");
-            }
-        }
-    </script>
+<!-- DIARY + CHAT -->
+
+<div id="diary">
+
+  <h2>📔 My Private Diary</h2>
+
+  <textarea id="text" placeholder="Write your diary..."></textarea><br>
+
+<button onclick="save()">Save</button> <button onclick="load()">Load</button>
+
+  <h3>💬 Private Chat</h3>
+
+  <div id="chatBox"></div>
+
+  <input id="chatInput" placeholder="Type message..." style="width:70%;">
+  <button onclick="sendMsg()">Send</button>
+
+</div>
+
+<script>
+let input = "";
+const SECRET = "1234";
+
+// calculator
+function press(val) {
+  input += val;
+  document.getElementById("screen").value = input;
+}
+
+function clearScreen() {
+  input = "";
+  document.getElementById("screen").value = "";
+}
+
+function unlock() {
+
+  if (input === SECRET) {
+    document.getElementById("calc").style.display = "none";
+    document.getElementById("diary").style.display = "block";
+    load();
+    loadChat();
+    return;
+  }
+
+  try {
+    let result = eval(input);
+    document.getElementById("screen").value = result;
+    input = result.toString();
+  } catch {
+    document.getElementById("screen").value = "Error";
+    input = "";
+  }
+}
+
+// diary
+function save() {
+  localStorage.setItem("diary", document.getElementById("text").value);
+  alert("Saved ✔");
+}
+
+function load() {
+  document.getElementById("text").value =
+    localStorage.getItem("diary") || "";
+}
+
+// chat
+function loadChat() {
+  let chat = JSON.parse(localStorage.getItem("chat") || "[]");
+  let box = document.getElementById("chatBox");
+  box.innerHTML = "";
+
+  chat.forEach(msg => {
+    let div = document.createElement("div");
+    div.className = "msg";
+    div.textContent = msg;
+    box.appendChild(div);
+  });
+}
+
+function sendMsg() {
+  let input = document.getElementById("chatInput");
+  let text = input.value.trim();
+
+  if (!text) return;
+
+  let chat = JSON.parse(localStorage.getItem("chat") || "[]");
+  chat.push(text);
+
+  localStorage.setItem("chat", JSON.stringify(chat));
+
+  input.value = "";
+  loadChat();
+}
+</script>
 
 </body>
 </html>
